@@ -4,8 +4,8 @@
      qbo_music_player
 
   </description>
-  <author>arturobc</author>
-  <license>BSD</license>
+  <author>Arturo Bajuelos</author>
+  <license>GPLv2</license>
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/qbo_music_player</url>
   <depend package="roscpp"/>
