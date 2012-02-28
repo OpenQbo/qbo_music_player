@@ -37,7 +37,6 @@
 #include <cxtypes.h>
 #include <climits>
 
-
 #include "Orbit.h"
 #include <cv_bridge/cv_bridge.h>
 #include <sensor_msgs/Image.h>
