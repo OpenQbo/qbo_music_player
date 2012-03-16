@@ -2,6 +2,7 @@ Package: qboros-electric-qbo-music-player
 Source: qboros-electric-qbo-music-player
 Version: 1.0-openqbo0
 Priority: standard
+Section: OpenQbo
 Architecture: amd64
 Depends: qboros-electric-qbo-stereo-selector, qboros-electric-qbo-talk
 Maintainer: Arturo Bajuelos <arturo@openqbo.org>
