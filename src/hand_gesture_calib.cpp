@@ -326,7 +326,7 @@ int main (int argc, char **argv)
 		//Erase previous files if necessary
 		if(replace_images)
 		{
-			boost::filesystem::remove_all(path);
+			boost::filesystem::remove(path);
 			boost::filesystem::create_directory(path);
 		}
 		else if(!boost::filesystem::is_directory(path))

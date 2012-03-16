@@ -81,7 +81,7 @@ int Orbit::loadObjectsNames(string input_path)
 		if (boost::filesystem::is_directory(itr->status()))
 		{
 
-			std::string object_name=itr->path().filename();
+			std::string object_name=itr->path().filename().string();
 
 			if(object_name.at(0) == '.')
 				continue;
@@ -141,7 +141,7 @@ int Orbit::loadOneObjectImages(OrbitObject &object)
 			//If the files extension is an image
 			if((extension==std::string(".jpg")) || (extension==std::string(".pgm")))
 			{
-				std::string imgFilename=object.images_dir_path_+"/"+itr->path().filename();
+				std::string imgFilename=object.images_dir_path_+"/"+itr->path().filename().string();
 				cv::Mat img =cv::imread(imgFilename);
 				object.images_.push_back(img);
 				num_images++;
@@ -311,7 +311,7 @@ int Orbit::loadOrbit(string load_path)
 int Orbit::storeOrbit(string save_path, string objects_folder_name)
 {
 
-	boost::filesystem::remove_all(save_path+"/"+objects_folder_name+"/");
+	boost::filesystem::remove(save_path+"/"+objects_folder_name+"/");
 
 	string objects_path = save_path+"/"+objects_folder_name;
 
@@ -1037,7 +1037,7 @@ int Orbit::teachOrbit(string update_path)
 	{
 		if (boost::filesystem::is_directory(itr->status()))
 		{
-			std::string object_name=itr->path().filename();
+			std::string object_name=itr->path().filename().string();
 			OrbitObject object(object_name);
 
 			object.images_dir_path_ = path+"/"+object_name;

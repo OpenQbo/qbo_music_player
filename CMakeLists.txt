@@ -33,3 +33,6 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 rosbuild_add_executable(hand_gesture_calib src/hand_gesture_calib.cpp src/Orbit.cpp src/OrbitObject.cpp)
 rosbuild_add_executable(hand_gesture_node src/hand_gesture_node.cpp src/Orbit.cpp src/OrbitObject.cpp)
 
+target_link_libraries(hand_gesture_calib libboost_filesystem.so libboost_system.so)
+target_link_libraries(hand_gesture_node libboost_filesystem.so libboost_system.so)
+
