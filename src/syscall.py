@@ -19,7 +19,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
 # MA 02110-1301, USA.
 #
-# Authors: Miguel Angel Julián <miguel.a.j@openqbo.com>
+# Authors: Miguel Angel Julian <miguel.a.j@openqbo.com>
 
 import subprocess
 

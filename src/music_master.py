@@ -43,7 +43,7 @@ def main():
     print "Starting Master Listener Node"
     
     rospy.Subscriber("/hand_gesture_node/hand_gesture", String, hand_gesture_callback)  
-    client_speak = rospy.ServiceProxy("/Qbo/festivalSayNoWait", Text2Speach)
+    client_speak = rospy.ServiceProxy("/qbo_talk/festival_say_no_wait", Text2Speach)
     
     runCmd("xmms2-launcher")
 
