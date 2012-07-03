@@ -400,8 +400,11 @@ int main (int argc, char **argv)
 		//orbit->linear_kernel = true;
 		ROS_INFO("Preparing gesture recognizer for BOW with SVN...");
 		orbit->prepareOrbit(Orbit::BAG_OF_WORDS_SVM);
-		ROS_INFO("Calibration completed and prepared for Gesture Recognition. Press Ctrl+C to exit");
+		ROS_INFO("Calibration completed and prepared for Gesture Recognition.");
+
 	}
 
-	return 0;
+    int system_ret = system("rosnode kill qbo_stereo_selector");
+    
+	return system_ret;
 }
