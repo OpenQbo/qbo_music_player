@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# coding: utf-8
 #
 # Software License Agreement (GPLv2 License)
 #
@@ -28,6 +29,8 @@ from std_msgs.msg import String
 from qbo_talk.srv import Text2Speach
 import time
 import re
+import json
+
 
 client_speak = None
 
@@ -35,9 +38,12 @@ playing_music = False
 
 music_volume = 80
 
+global language
+
 def main():
     
     global client_speak
+    global language
     
     rospy.init_node("music_master")
     print "Starting Master Listener Node"
@@ -47,7 +53,7 @@ def main():
     
     runCmd("xmms2-launcher")
 
-    speak_this("I am ready to play music")
+    speak_this(language["I AM READY TO PLAY MUSIC"])
     
     rospy.spin()
     runCmd("nyxmms2 stop")
@@ -55,8 +61,10 @@ def main():
 
 def hand_gesture_callback(data):
     
+    global language
     command = str(data.data)
     
+
     rospy.loginfo(rospy.get_name()+": I heard %s",command)
     
     global playing_music
@@ -68,22 +76,18 @@ def hand_gesture_callback(data):
         runCmd("nyxmms2 toggle")
         
         if playing_music :
-            speak_this("Music pause")
+            speak_this(language["MUSIC PAUSE"])
             playing_music = False
         else:
             runCmd("nyxmms2 play")
             song_info = get_song_info_2()
-            if song_info[1].strip()=="Come What May":
-		speak_this("Playing "+song_info[1])
-		speak_this("by "+song_info[0])
-	    else:
-            	speak_this("Playing "+song_info[1]+" by "+song_info[0])
+            speak_this(language["PLAYING"]+" "+song_info[1]+" "language["BY"]+" "+song_info[0])
             playing_music = True
         
     
     elif command == "stop":
         runCmd("nyxmms2 "+command)  
-        speak_this("Music stopped")
+        speak_this(language["MUSIC STOPPED"])
         playing_music = False
     
     elif command == "next" or command == "prev":
@@ -91,46 +95,24 @@ def hand_gesture_callback(data):
         if playing_music:
             time.sleep(1)
             song_info = get_song_info_2()
-	    if song_info[1].strip()=="Spring":
-		speak_this("Playing " + song_info[1])
-		speak_this("by "+song_info[0])
-	    else:
-            	speak_this("Playing "+song_info[1]+" by "+song_info[0])
+            speak_this(language["PLAYING"]+" "+song_info[1]+" "language["BY"]+" "+song_info[0])
         else:
             time.sleep(1)
             song_info = get_song_info_2()
-            
-            speak_this("Song selected ")
-	    if song_info[1].strip()=="Come What May":
-	        speak_this(song_info[1])
-		speak_this("by "+song_info[0])	
-            else:
-		speak_this(song_info[1]+" by "+song_info[0])
+            speak_this(language["SONG SELECTED"])
+	    speak_this(song_info[1]+" "+language["BY"]+" "+song_info[0])
          
     elif command=="volume_up":
         if music_volume<=80:
             music_volume+=20
         runCmd("nyxmms2 server volume "+str(music_volume))
-        speak_this("Volume up")
+        speak_this(language["VOLUME UP"])
     
     elif command=="volume_down":
         if music_volume>20:
             music_volume-=20
         runCmd("nyxmms2 server volume "+str(music_volume)) 
-        speak_this("Volume down")
-
-def get_song_info():
-    (ph_out, ph_err, ph_ret) = runCmd("nyxmms2 status")
-    out_str = str(ph_out)
-    splitted = out_str.split(":")
-    song_info = splitted[1].strip()
-    
-    song_info = song_info.split(" - ")
-    
-    return song_info
-    
-#    speak_this("Playing "+song_info[0])
-#    speak_this(song_info[1])
+        speak_this(language["VOLUME DOWN"])
 
 def get_song_info_2():
     (ph_out, ph_err, ph_ret) = runCmd("nyxmms2 list")
@@ -153,8 +135,19 @@ def get_song_info_2():
 
 def speak_this(text):
     global client_speak
+    global language
+
     client_speak(text)
     
+def loadDictionary(lang_sym):
+    global language
+
+    lang_path=roslib.packages.get_pkg_dir('qbo_music_player')+"/config/lang/"
+    #Load default dict
+    fp=open(lang_path+lang_sym+'.txt','r')
+    language=json.load(fp,'utf-8')
+    fp.close()
+
 
 if __name__ == '__main__':
 
