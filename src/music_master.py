@@ -53,8 +53,15 @@ def main():
     
     runCmd("xmms2-launcher")
 
+
+    lang = rospy.get_param("/system_lang", "en")
+
+    loadDictionary(lang)
+
     speak_this(language["I AM READY TO PLAY MUSIC"])
-    
+   
+    rospy.Subscriber("/system_lang", String, change_lang_callback)
+ 
     rospy.spin()
     runCmd("nyxmms2 stop")
 
@@ -81,7 +88,7 @@ def hand_gesture_callback(data):
         else:
             runCmd("nyxmms2 play")
             song_info = get_song_info_2()
-            speak_this(language["PLAYING"]+" "+song_info[1]+" "language["BY"]+" "+song_info[0])
+            speak_this(language["PLAYING"]+" "+song_info[1]+" "+language["BY"]+" "+song_info[0])
             playing_music = True
         
     
@@ -95,7 +102,7 @@ def hand_gesture_callback(data):
         if playing_music:
             time.sleep(1)
             song_info = get_song_info_2()
-            speak_this(language["PLAYING"]+" "+song_info[1]+" "language["BY"]+" "+song_info[0])
+            speak_this(language["PLAYING"]+" "+song_info[1]+" "+language["BY"]+" "+song_info[0])
         else:
             time.sleep(1)
             song_info = get_song_info_2()
@@ -137,7 +144,18 @@ def speak_this(text):
     global client_speak
     global language
 
-    client_speak(text)
+    client_speak(str(text))
+
+
+def change_lang_callback(data):
+    if str(data.data) != "es" and str(data.data)!="en":
+        rospy.loginfo("Language not recognized")
+        return
+
+    lang = data.data
+    rospy.loginfo("Changing language to "+str(data.data))
+    loadDictionary(lang)
+
     
 def loadDictionary(lang_sym):
     global language
